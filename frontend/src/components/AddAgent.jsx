@@ -12,6 +12,17 @@ const AddAgent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Client-side validation for mobile
+    if (mobile.length > 10) {
+      setError('numbers exceeded');
+      return;
+    }
+    if (mobile.length < 10) {
+      setError('mobile number must be 10 digits');
+      return;
+    }
+
     try {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };

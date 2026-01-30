@@ -6,7 +6,7 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 
 // Add agent
-router.post('/', auth, async (req, res) => {
+router.post('/', async (req, res) => {
   const { name, email, mobile, password } = req.body;
 
   try {
@@ -15,6 +15,13 @@ router.post('/', auth, async (req, res) => {
     await agent.save();
     res.json(agent);
   } catch (err) {
+    if (err.code === 11000) {
+      if (err.message.includes('mobile')) {
+        return res.status(400).json({ message: 'Duplicate mobile number' });
+      } else if (err.message.includes('email')) {
+        return res.status(400).json({ message: 'Duplicate email' });
+      }
+    }
     res.status(500).json({ message: 'Server error' });
   }
 });

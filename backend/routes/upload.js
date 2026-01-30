@@ -29,9 +29,6 @@ router.post('/', auth, upload.single('file'), async (req, res) => {
         const agents = await Agent.find();
         if (agents.length !== 5) return res.status(400).json({ message: 'Need exactly 5 agents' });
 
-        // Clear previous lists
-        await List.deleteMany();
-
         const itemsPerAgent = Math.floor(results.length / 5);
         let extra = results.length % 5;
         let index = 0;
@@ -51,7 +48,7 @@ router.post('/', auth, upload.single('file'), async (req, res) => {
           }
         }
 
-        res.json({ message: 'Lists distributed successfully' });
+        res.json({ message: 'Lists appended successfully' });
       } catch (err) {
         res.status(500).json({ message: 'Server error' });
       }
